@@ -65,35 +65,18 @@ def draw_interactive_graph(G, selecionados):
 
     net.show("graph.html")
 
-# def draw_graph(G):
-#     plt.figure(figsize=(12, 8))  
-    
-#     # pos = nx.spring_layout(G, k=0.5, seed=42) 
-
-#     pos = nx.kamada_kawai_layout(G)  
-
-#     labels = {node: f"{node}\n({G.degree(node)})" for node in G.nodes}
-
-#     node_sizes = [G.degree(node) * 10 for node in G.nodes]
-
-#     nx.draw(G, pos, with_labels=True, labels=labels, 
-#             node_color="lightblue", edge_color="gray", 
-#             node_size=node_sizes, font_size=8)  # Fonte menor para não sobrecarregar
-
-#     plt.show()
-
-if __name__ == "_main_":
+if __name__ == "__main__":
 
     G = nx.DiGraph()
     selecionados = []
 
-    # pagina_inicial = requests.get("https://pt.wikipedia.org/wiki/Especial:Aleat%C3%B3ria")
-    pagina_inicial = requests.get("https://pt.wikipedia.org/wiki/França")
+    pagina_inicial = requests.get("https://pt.wikipedia.org/wiki/Especial:Aleat%C3%B3ria")
+    # pagina_inicial = requests.get("https://pt.wikipedia.org/wiki/França")
 
     proxima_pagina = pagina_inicial
 
     iteracao = 1
-    while(iteracao < 2):
+    while(iteracao < 8):
         soup = BeautifulSoup(proxima_pagina.text, "html.parser")
         nome = soup.find(class_="mw-page-title-main").text
         if(iteracao == 1):
