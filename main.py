@@ -1,3 +1,4 @@
+import parametros
 import networkx as nx
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
@@ -23,7 +24,7 @@ def obter_titulo_pagina(link_relativo):
 
 
 
-def salvar_grafo(G, selecionados, filename="grafo.json"):
+def salvar_grafo(G, selecionados, filename=parametros.ARQUIVO_SAIDA_GRAFO):
     for node in G.nodes():
         G.nodes[node]['selecionado'] = node in selecionados 
 
@@ -31,7 +32,7 @@ def salvar_grafo(G, selecionados, filename="grafo.json"):
     with open(filename, "w") as f:
         json.dump(data, f)  
 
-def carregar_grafo(filename="grafo.json"):
+def carregar_grafo(filename=parametros.ARQUIVO_ENTRADA_GRAFO):
     with open(filename, "r") as f:
         data = json.load(f)  
 
@@ -98,7 +99,7 @@ if __name__ == "__main__":
     if escolha_grafo == 1:
         G = nx.DiGraph()
         selecionados = []
-        pagina_inicial = requests.get("https://pt.wikipedia.org/wiki/Especial:Aleat%C3%B3ria")
+        pagina_inicial = requests.get(parametros.PAGINA_INICIAL)
     elif escolha_grafo == 2:
         G,selecionados = carregar_grafo()
         novo_selecionado = random.choice(list(G.nodes))
@@ -111,8 +112,8 @@ if __name__ == "__main__":
 
     proxima_pagina = pagina_inicial
 
-    iteracao = 1
-    while(iteracao < 2):
+    iteracao = 0
+    while(iteracao < parametros.NUMERO_ITERACOES):
         soup = BeautifulSoup(proxima_pagina.text, "html.parser")
         nome = soup.find(class_="mw-page-title-main").text
         if(iteracao == 1):
@@ -135,7 +136,7 @@ if __name__ == "__main__":
 
                     link = tag["href"]
                     
-                if link.startswith("/wiki/") and not link.startswith(("/wiki/Ficheiro:", "/wiki/File:", "/wiki/Ajuda:", "/wiki/Wikip", "/wiki/Predefini%C3%A7%C3%A3o:Info")):
+                if link.startswith("/wiki/") and not link.startswith(("/wiki/Ficheiro:", "/wiki/File:", "/wiki/Ajuda:", "/wiki/Wikip", "/wiki/Predefini%C3%A7%C3%A3o:Info", "/wiki/Portal:")):
                     titulos.append((tag.get("title", "Sem título"), link))
 
         # for titulo, link in titulos:
